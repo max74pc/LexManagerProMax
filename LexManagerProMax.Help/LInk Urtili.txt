@@ -1,0 +1,7 @@
+https://github.com/AvaloniaUI
+01. Avalonia UI Real World (Images & Buttons)
+https://www.youtube.com/watch?v=ort9IqKAnL4
+The future of .NET UI- Build faster, ship sooner with technology trusted by Unity, JetBrains, and hundreds of thousands of apps
+https://avaloniaui.net/
+
+https://github.com/AvaloniaUI/Avalonia.Samples

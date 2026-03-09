@@ -1,0 +1,151 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LexManagerProMax.AvaloniaApp.ViewModels.AI"
+             x:Class="LexManagerProMax.AvaloniaApp.Views.AI.AIAssistantView"
+             x:DataType="vm:AIAssistantViewModel">
+
+	<Grid RowDefinitions="Auto,*,Auto">
+
+		<!-- Header -->
+		<Border Grid.Row="0" Background="White" Padding="16,12"
+				BorderBrush="#E0E8F0" BorderThickness="0,0,0,1">
+			<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+				<TextBlock Grid.Column="0" Text="🤖 Assistente AI Legale"
+						   FontSize="20" FontWeight="Bold" Foreground="#1E2A3A"
+						   VerticalAlignment="Center"/>
+				<!-- FIX: TipiRicerca → TipiDisponibili, TipoRicerca → TipoSelezionato -->
+				<ComboBox Grid.Column="2"
+						  ItemsSource="{Binding TipiDisponibili}"
+						  SelectedItem="{Binding TipoSelezionato}"
+						  Width="200" Margin="0,0,12,0"/>
+				<Button Grid.Column="3" Content="+ Nuova" Classes="secondary-btn"
+						Command="{Binding NuovaSessioneCommand}"/>
+			</Grid>
+		</Border>
+
+		<!-- Chat area -->
+		<ScrollViewer Grid.Row="1" Background="#F0F4F8" Name="ScrollMessages">
+			<ItemsControl ItemsSource="{Binding Messaggi}" Margin="16">
+				<ItemsControl.ItemTemplate>
+					<!-- FIX: ChatMessage → ChatBubbleItem -->
+					<DataTemplate x:DataType="vm:ChatBubbleItem">
+						<Grid Margin="0,6">
+
+							<!-- Messaggio utente -->
+							<!-- FIX: IsUser → IsUtente, Contenuto → Testo -->
+							<Border HorizontalAlignment="Right" MaxWidth="600"
+									Background="#2563EB" CornerRadius="12,12,2,12"
+									Padding="12,10" IsVisible="{Binding IsUtente}">
+								<StackPanel Spacing="4">
+									<TextBlock Text="{Binding Testo}"
+											   TextWrapping="Wrap"
+											   Foreground="White"/>
+									<TextBlock Text="{Binding TimestampLabel}"
+											   FontSize="10" Foreground="#BFDBFE"
+											   HorizontalAlignment="Right"/>
+								</StackPanel>
+							</Border>
+
+							<!-- Risposta AI -->
+							<!-- FIX: !IsUser → IsAssistente, Contenuto → Testo -->
+							<Border HorizontalAlignment="Left" MaxWidth="700"
+									Background="White" CornerRadius="2,12,12,12"
+									Padding="12,10" IsVisible="{Binding IsAssistente}"
+									BoxShadow="0 1 3 0 #1A000000">
+								<StackPanel Spacing="6">
+									<TextBlock Text="⚖ Assistente AI" FontSize="11"
+											   Foreground="#6B7280"/>
+									<!-- Indicatore streaming in corso -->
+									<StackPanel Orientation="Horizontal" Spacing="6"
+												IsVisible="{Binding IsLoading}">
+										<TextBlock Text="⏳" FontSize="12"/>
+										<TextBlock Text="Elaborazione in corso..."
+												   FontSize="12" Foreground="#9CA3AF"
+												   FontStyle="Italic"/>
+									</StackPanel>
+									<TextBlock Text="{Binding Testo}"
+											   TextWrapping="Wrap"
+											   Foreground="#1F2937"
+											   IsVisible="{Binding !IsLoading}"/>
+									<TextBlock Text="{Binding TimestampLabel}"
+											   FontSize="10" Foreground="#9CA3AF"
+											   HorizontalAlignment="Right"/>
+								</StackPanel>
+							</Border>
+
+						</Grid>
+					</DataTemplate>
+				</ItemsControl.ItemTemplate>
+			</ItemsControl>
+		</ScrollViewer>
+
+		<!-- Input area -->
+		<Border Grid.Row="2" Background="White" Padding="16,12"
+				BorderBrush="#E0E8F0" BorderThickness="0,1,0,0">
+			<Grid RowDefinitions="Auto,Auto">
+
+				<!-- Quick prompts -->
+				<!-- FIX: CommandParameter con stringhe semplici, niente graffe -->
+				<StackPanel Grid.Row="0" Orientation="Horizontal" Spacing="8" Margin="0,0,0,10">
+					<TextBlock Text="Rapido:" VerticalAlignment="Center" FontSize="12"
+							   Foreground="#6B7280"/>
+					<Button Content="📋 Sentenza" Classes="chip-btn"
+							Command="{Binding UsaPromptRapidoCommand}">
+						<Button.CommandParameter>
+							<x:String>Cerca giurisprudenza rilevante sul punto trattato.</x:String>
+						</Button.CommandParameter>
+					</Button>
+					<Button Content="📖 Norma" Classes="chip-btn"
+							Command="{Binding UsaPromptRapidoCommand}">
+						<Button.CommandParameter>
+							<x:String>Qual è la normativa applicabile al caso?</x:String>
+						</Button.CommandParameter>
+					</Button>
+					<Button Content="📐 Schema" Classes="chip-btn"
+							Command="{Binding UsaPromptRapidoCommand}">
+						<Button.CommandParameter>
+							<x:String>Crea uno schema per l'atto da redigere.</x:String>
+						</Button.CommandParameter>
+					</Button>
+					<Button Content="✍️ Atto" Classes="chip-btn"
+							Command="{Binding UsaPromptRapidoCommand}">
+						<Button.CommandParameter>
+							<x:String>Suggerisci una strategia difensiva per il caso.</x:String>
+						</Button.CommandParameter>
+					</Button>
+				</StackPanel>
+
+				<!-- Input box -->
+				<Grid Grid.Row="1" ColumnDefinitions="*,Auto,Auto">
+
+					<TextBox Grid.Column="0"
+							 Text="{Binding InputUtente}"
+							 Watermark="Fai una domanda giuridica, cerca giurisprudenza, richiedi assistenza..."
+							 AcceptsReturn="False"
+							 Classes="chat-input"
+							 IsEnabled="{Binding !IsStreaming}"
+							 Margin="0,0,8,0"/>
+
+					<!-- FIX: IsLoading → IsStreaming, aggiunto pulsante interrompi -->
+					<Button Grid.Column="1"
+							Content="⏹"
+							Command="{Binding InterrompiStreamingCommand}"
+							Classes="danger-icon-btn"
+							ToolTip.Tip="Interrompi risposta"
+							IsVisible="{Binding IsStreaming}"
+							Margin="0,0,8,0"/>
+
+					<Button Grid.Column="2"
+							Content="➤ Invia"
+							Command="{Binding InviaMessaggioCommand}"
+							IsEnabled="{Binding CanSend}"
+							Classes="primary-btn"
+							Width="90"/>
+
+				</Grid>
+
+			</Grid>
+		</Border>
+
+	</Grid>
+</UserControl>

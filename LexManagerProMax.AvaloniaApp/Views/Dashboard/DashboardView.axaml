@@ -1,0 +1,292 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LexManagerProMax.AvaloniaApp.ViewModels.Dashboard"
+             x:Class="LexManagerProMax.AvaloniaApp.Views.Dashboard.DashboardView"
+             x:DataType="vm:DashboardViewModel">
+
+	<Grid RowDefinitions="Auto,*">
+
+		<!-- ── HEADER ── -->
+		<Border Grid.Row="0" Background="White" Padding="24,16"
+				BorderBrush="#E0E8F0" BorderThickness="0,0,0,1">
+			<Grid ColumnDefinitions="*,Auto">
+
+				<StackPanel Grid.Column="0" Spacing="2">
+					<StackPanel Orientation="Horizontal" Spacing="8">
+						<TextBlock Text="{Binding Saluto}"
+								   FontSize="22" FontWeight="Bold" Foreground="#1E2A3A"/>
+						<TextBlock Text="⚖" FontSize="22"/>
+					</StackPanel>
+					<TextBlock Text="{Binding DataOggi}"
+							   FontSize="13" Foreground="#6B7280"/>
+				</StackPanel>
+
+				<Button Grid.Column="1"
+						Content="🔄 Aggiorna"
+						Command="{Binding RefreshCommand}"
+						Classes="secondary-btn"
+						IsEnabled="{Binding !IsLoading}"/>
+
+			</Grid>
+		</Border>
+
+		<!-- ── CORPO ── -->
+		<ScrollViewer Grid.Row="1" Background="#F0F4F8" Padding="24">
+			<StackPanel Spacing="24">
+
+				<!-- ════════════════════════════════════════════════════════ -->
+				<!-- KPI CARDS                                               -->
+				<!-- ════════════════════════════════════════════════════════ -->
+				<Grid ColumnDefinitions="*,*,*,*,*,*" >
+
+					<!-- Fascicoli aperti -->
+					<Border Grid.Column="0" Margin="0,0,12,0"
+							Background="White" CornerRadius="12" Padding="20,16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="6">
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<Border Background="#DBEAFE" CornerRadius="8"
+										Width="36" Height="36">
+									<TextBlock Text="📁" FontSize="18"
+											   HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+								</Border>
+								<TextBlock Text="Fascicoli" FontSize="12"
+										   Foreground="#6B7280" VerticalAlignment="Center"/>
+							</StackPanel>
+							<TextBlock Text="{Binding FascicoliAperti}"
+									   FontSize="32" FontWeight="Bold" Foreground="#1E2A3A"/>
+							<TextBlock Text="aperti" FontSize="11" Foreground="#9CA3AF"/>
+						</StackPanel>
+					</Border>
+
+					<!-- Scadenze oggi -->
+					<Border Grid.Column="1" Margin="0,0,12,0"
+							Background="White" CornerRadius="12" Padding="20,16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="6">
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<Border Background="#FEE2E2" CornerRadius="8"
+										Width="36" Height="36">
+									<TextBlock Text="🔴" FontSize="18"
+											   HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+								</Border>
+								<TextBlock Text="Oggi" FontSize="12"
+										   Foreground="#6B7280" VerticalAlignment="Center"/>
+							</StackPanel>
+							<TextBlock Text="{Binding ScadenzeOggi}"
+									   FontSize="32" FontWeight="Bold" Foreground="#DC2626"/>
+							<TextBlock Text="scadenze" FontSize="11" Foreground="#9CA3AF"/>
+						</StackPanel>
+					</Border>
+
+					<!-- Scadenze 7 giorni -->
+					<Border Grid.Column="2" Margin="0,0,12,0"
+							Background="White" CornerRadius="12" Padding="20,16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="6">
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<Border Background="#FEF9C3" CornerRadius="8"
+										Width="36" Height="36">
+									<TextBlock Text="⏰" FontSize="18"
+											   HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+								</Border>
+								<TextBlock Text="7 giorni" FontSize="12"
+										   Foreground="#6B7280" VerticalAlignment="Center"/>
+							</StackPanel>
+							<TextBlock Text="{Binding Scadenze7Giorni}"
+									   FontSize="32" FontWeight="Bold" Foreground="#D97706"/>
+							<TextBlock Text="scadenze" FontSize="11" Foreground="#9CA3AF"/>
+						</StackPanel>
+					</Border>
+
+					<!-- Clienti -->
+					<Border Grid.Column="3" Margin="0,0,12,0"
+							Background="White" CornerRadius="12" Padding="20,16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="6">
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<Border Background="#DCFCE7" CornerRadius="8"
+										Width="36" Height="36">
+									<TextBlock Text="👤" FontSize="18"
+											   HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+								</Border>
+								<TextBlock Text="Clienti" FontSize="12"
+										   Foreground="#6B7280" VerticalAlignment="Center"/>
+							</StackPanel>
+							<TextBlock Text="{Binding TotaleClienti}"
+									   FontSize="32" FontWeight="Bold" Foreground="#1E2A3A"/>
+							<TextBlock Text="totali" FontSize="11" Foreground="#9CA3AF"/>
+						</StackPanel>
+					</Border>
+
+					<!-- Fascicoli chiusi questo mese -->
+					<Border Grid.Column="4" Margin="0,0,12,0"
+							Background="White" CornerRadius="12" Padding="20,16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="6">
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<Border Background="#F3E8FF" CornerRadius="8"
+										Width="36" Height="36">
+									<TextBlock Text="✅" FontSize="18"
+											   HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+								</Border>
+								<TextBlock Text="Chiusi" FontSize="12"
+										   Foreground="#6B7280" VerticalAlignment="Center"/>
+							</StackPanel>
+							<TextBlock Text="{Binding FascicoliChiusiMese}"
+									   FontSize="32" FontWeight="Bold" Foreground="#1E2A3A"/>
+							<TextBlock Text="questo mese" FontSize="11" Foreground="#9CA3AF"/>
+						</StackPanel>
+					</Border>
+
+					<!-- Sessioni AI -->
+					<Border Grid.Column="5"
+							Background="White" CornerRadius="12" Padding="20,16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="6">
+							<StackPanel Orientation="Horizontal" Spacing="8">
+								<Border Background="#FCE7F3" CornerRadius="8"
+										Width="36" Height="36">
+									<TextBlock Text="🤖" FontSize="18"
+											   HorizontalAlignment="Center"
+											   VerticalAlignment="Center"/>
+								</Border>
+								<TextBlock Text="AI" FontSize="12"
+										   Foreground="#6B7280" VerticalAlignment="Center"/>
+							</StackPanel>
+							<TextBlock Text="{Binding SessioniAIUsate}"
+									   FontSize="32" FontWeight="Bold" Foreground="#1E2A3A"/>
+							<TextBlock Text="sessioni" FontSize="11" Foreground="#9CA3AF"/>
+						</StackPanel>
+					</Border>
+
+				</Grid>
+
+				<!-- ════════════════════════════════════════════════════════ -->
+				<!-- RIGA INFERIORE: Accessi rapidi + Attività recenti       -->
+				<!-- ════════════════════════════════════════════════════════ -->
+				<Grid ColumnDefinitions="Auto,*">
+
+					<!-- ACCESSI RAPIDI -->
+					<Border Grid.Column="0" Width="220" Margin="0,0,16,0"
+							Background="White" CornerRadius="12" Padding="16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<StackPanel Spacing="12">
+
+							<TextBlock Text="Accesso rapido"
+									   FontSize="14" FontWeight="SemiBold"
+									   Foreground="#1E2A3A"/>
+
+							<ItemsControl ItemsSource="{Binding AccessiRapidi}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate x:DataType="vm:AccessoRapidoItem">
+										<Button Margin="0,2"
+												HorizontalAlignment="Stretch"
+												HorizontalContentAlignment="Left"
+												Command="{Binding $parent[UserControl].((vm:DashboardViewModel)DataContext).NavigaACommand}"
+												CommandParameter="{Binding NavigateTo}"
+												Classes="flat-btn">
+											<StackPanel Orientation="Horizontal" Spacing="10">
+												<Border Background="{Binding ColoreAccento}"
+														CornerRadius="8" Width="32" Height="32">
+													<TextBlock Text="{Binding Icona}"
+															   FontSize="16"
+															   HorizontalAlignment="Center"
+															   VerticalAlignment="Center"/>
+												</Border>
+												<TextBlock Text="{Binding Titolo}"
+														   FontSize="13" Foreground="#374151"
+														   VerticalAlignment="Center"/>
+											</StackPanel>
+										</Button>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+						</StackPanel>
+					</Border>
+
+					<!-- ATTIVITÀ RECENTI -->
+					<Border Grid.Column="1"
+							Background="White" CornerRadius="12" Padding="16"
+							BoxShadow="0 1 4 0 #0D000000">
+						<Grid RowDefinitions="Auto,*">
+
+							<StackPanel Grid.Row="0" Orientation="Horizontal"
+										Margin="0,0,0,12">
+								<TextBlock Text="Attività recenti"
+										   FontSize="14" FontWeight="SemiBold"
+										   Foreground="#1E2A3A"/>
+							</StackPanel>
+
+							<!-- Spinner caricamento -->
+							<Border Grid.Row="1" IsVisible="{Binding IsLoading}"
+									HorizontalAlignment="Center" VerticalAlignment="Center">
+								<TextBlock Text="Caricamento..." FontSize="13"
+										   Foreground="#9CA3AF"/>
+							</Border>
+
+							<!-- Lista attività -->
+							<ItemsControl Grid.Row="1"
+										  ItemsSource="{Binding AttivitaRecenti}"
+										  IsVisible="{Binding !IsLoading}">
+								<ItemsControl.ItemTemplate>
+									<DataTemplate x:DataType="vm:AttivitaRecenteItem">
+										<Border Padding="8,6" CornerRadius="8"
+												Margin="0,2">
+											<Grid ColumnDefinitions="Auto,*,Auto">
+
+												<!-- Icona -->
+												<Border Grid.Column="0"
+														Background="{Binding ColoreIcona}"
+														CornerRadius="8"
+														Width="36" Height="36"
+														Margin="0,0,12,0">
+													<TextBlock Text="{Binding Icona}"
+															   FontSize="18"
+															   HorizontalAlignment="Center"
+															   VerticalAlignment="Center"/>
+												</Border>
+
+												<!-- Testo -->
+												<StackPanel Grid.Column="1"
+															VerticalAlignment="Center"
+															Spacing="2">
+													<TextBlock Text="{Binding Descrizione}"
+															   FontSize="13" FontWeight="SemiBold"
+															   Foreground="#1F2937"
+															   TextTrimming="CharacterEllipsis"/>
+													<TextBlock Text="{Binding Dettaglio}"
+															   FontSize="11" Foreground="#9CA3AF"
+															   TextTrimming="CharacterEllipsis"/>
+												</StackPanel>
+
+												<!-- Timestamp -->
+												<TextBlock Grid.Column="2"
+														   Text="{Binding TimestampLabel}"
+														   FontSize="11" Foreground="#D1D5DB"
+														   VerticalAlignment="Center"
+														   Margin="12,0,0,0"/>
+
+											</Grid>
+										</Border>
+									</DataTemplate>
+								</ItemsControl.ItemTemplate>
+							</ItemsControl>
+
+						</Grid>
+					</Border>
+
+				</Grid>
+
+			</StackPanel>
+		</ScrollViewer>
+
+	</Grid>
+
+</UserControl>

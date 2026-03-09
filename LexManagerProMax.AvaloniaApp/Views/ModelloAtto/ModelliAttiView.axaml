@@ -1,0 +1,355 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LexManagerProMax.AvaloniaApp.ViewModels.Atti"
+             x:Class="LexManagerProMax.AvaloniaApp.Views.ModelloAtto.ModelliAttiView"
+             x:DataType="vm:ModelliAttiViewModel">
+
+	<Border BorderBrush="#E0E8F0" BorderThickness="0,0,1,0">
+		<Grid ColumnDefinitions="300,*">
+
+			<!-- ═══════════════════════════════════════════════════════════ -->
+			<!-- COLONNA SINISTRA — Lista modelli                           -->
+			<!-- ═══════════════════════════════════════════════════════════ -->
+			<Grid Grid.Column="0"
+                  RowDefinitions="Auto,Auto,*,Auto"
+                  Background="White">
+
+				<Border Grid.Row="0" Background="#1E2A3A" Padding="14,12">
+					<TextBlock Text="📄 Modelli di Atti"
+                               FontSize="15" FontWeight="Bold" Foreground="White"/>
+				</Border>
+
+				<StackPanel Grid.Row="1" Margin="10,10,10,6" Spacing="8">
+					<TextBox Text="{Binding SearchText}"
+                             Watermark="🔍 Cerca modello..."
+                             Classes="search-box"/>
+					<ComboBox ItemsSource="{Binding CategorieDisponibili}"
+                              SelectedItem="{Binding FiltroCategoriaSelezionata}"
+                              PlaceholderText="Tutte le categorie"
+                              HorizontalAlignment="Stretch"/>
+				</StackPanel>
+
+				<ListBox Grid.Row="2"
+                         ItemsSource="{Binding ModelliRaggruppati}"
+                         SelectedItem="{Binding ModelloSelezionato}"
+                         Background="Transparent"
+                         ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+					<ListBox.ItemTemplate>
+						<DataTemplate x:DataType="vm:ModelloAttoListItem">
+							<Border Padding="10,8" CornerRadius="6" Margin="4,2">
+								<Grid ColumnDefinitions="Auto,*,Auto">
+
+									<Border Grid.Column="0"
+                                            Background="{Binding CategoriaColor}"
+                                            CornerRadius="4" Width="32" Height="32"
+                                            Margin="0,0,10,0">
+										<TextBlock Text="{Binding CategoriaIcon}"
+                                                   FontSize="16"
+                                                   HorizontalAlignment="Center"
+                                                   VerticalAlignment="Center"/>
+									</Border>
+
+									<StackPanel Grid.Column="1" VerticalAlignment="Center">
+										<TextBlock Text="{Binding Nome}"
+                                                   FontWeight="SemiBold" FontSize="13"
+                                                   Foreground="#1F2937"
+                                                   TextTrimming="CharacterEllipsis"/>
+										<StackPanel Orientation="Horizontal" Spacing="6" Margin="0,2,0,0">
+											<TextBlock Text="{Binding Categoria}"
+                                                       FontSize="11" Foreground="#6B7280"/>
+											<TextBlock Text="•" FontSize="11" Foreground="#D1D5DB"/>
+											<TextBlock Text="{Binding VersioneLabel}"
+                                                       FontSize="11" Foreground="#6B7280"/>
+										</StackPanel>
+									</StackPanel>
+
+									<Ellipse Grid.Column="2"
+                                             Width="8" Height="8"
+                                             Fill="{Binding IsAttivoColor}"
+                                             VerticalAlignment="Center"/>
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ListBox.ItemTemplate>
+				</ListBox>
+
+				<Button Grid.Row="3"
+                        Content="+ Nuovo Modello"
+                        Command="{Binding NuovoModelloCommand}"
+                        Classes="primary-btn"
+                        HorizontalAlignment="Stretch"
+                        Margin="10,6,10,10"/>
+			</Grid>
+
+			<!-- ═══════════════════════════════════════════════════════════ -->
+			<!-- COLONNA DESTRA — Editor / Anteprima / Segnaposto           -->
+			<!-- ═══════════════════════════════════════════════════════════ -->
+			<Grid Grid.Column="1" RowDefinitions="Auto,*,Auto">
+
+				<!-- TOOLBAR -->
+				<Border Grid.Row="0" Background="White" Padding="16,10"
+                        BorderBrush="#E0E8F0" BorderThickness="0,0,0,1">
+					<Grid ColumnDefinitions="*,Auto">
+
+						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="12"
+                                    VerticalAlignment="Center">
+							<TextBlock Text="{Binding TitoloEditor}"
+                                       FontSize="16" FontWeight="Bold" Foreground="#1E2A3A"
+                                       VerticalAlignment="Center"/>
+							<Border Background="#DBEAFE" CornerRadius="12" Padding="8,3"
+                                    IsVisible="{Binding ModelloSelezionato,
+                                Converter={x:Static ObjectConverters.IsNotNull}}">
+								<TextBlock Text="{Binding VersioneLabel}"
+                                           FontSize="11" Foreground="#1D4ED8"/>
+							</Border>
+							<Border Background="#FEF9C3" CornerRadius="12" Padding="8,3"
+                                    IsVisible="{Binding HasModifiche}">
+								<TextBlock Text="● modificato"
+                                           FontSize="11" Foreground="#854D0E"/>
+							</Border>
+						</StackPanel>
+
+						<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8">
+							<Button Content="✏️ Editor"
+                                    Command="{Binding MostraEditorCommand}"
+                                    Classes="secondary-btn"/>
+							<Button Content="👁 Anteprima"
+                                    Command="{Binding MostraAnteprimaCommand}"
+                                    Classes="secondary-btn"/>
+							<Separator Width="1" Background="#E5E7EB" Margin="4,0"/>
+							<Button Content="📋 Segnaposto"
+                                    Command="{Binding ToggleSegnapostoCommand}"
+                                    Classes="secondary-btn"/>
+							<Button Content="🔄 Anteprima test"
+                                    Command="{Binding GeneraAnteprimaCommand}"
+                                    Classes="secondary-btn"/>
+							<Button Content="📥 Esporta .docx"
+                                    Command="{Binding EsportaDocxCommand}"
+                                    Classes="secondary-btn"
+                                    IsEnabled="{Binding ModelloSelezionato,
+                                Converter={x:Static ObjectConverters.IsNotNull}}"/>
+							<Button Content="🗑"
+                                    Command="{Binding EliminaModelloCommand}"
+                                    Classes="danger-icon-btn"
+                                    IsVisible="{Binding ModelloSelezionato,
+                                Converter={x:Static ObjectConverters.IsNotNull}}"/>
+						</StackPanel>
+
+					</Grid>
+				</Border>
+
+				<!-- AREA PRINCIPALE -->
+				<Grid Grid.Row="1" ColumnDefinitions="*,Auto">
+
+					<Grid Grid.Column="0">
+
+						<!-- Stato vuoto -->
+						<Border IsVisible="{Binding ModelloSelezionato,
+                              Converter={x:Static ObjectConverters.IsNull}}"
+                                VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+							<StackPanel HorizontalAlignment="Center" Spacing="16">
+								<TextBlock Text="📄" FontSize="64"
+                                           HorizontalAlignment="Center" Opacity="0.3"/>
+								<TextBlock Text="Seleziona un modello dalla lista"
+                                           FontSize="16" Foreground="#9CA3AF"
+                                           HorizontalAlignment="Center"/>
+								<TextBlock Text="oppure crea un nuovo modello"
+                                           FontSize="13" Foreground="#D1D5DB"
+                                           HorizontalAlignment="Center"/>
+								<Button Content="+ Crea il primo modello"
+                                        Command="{Binding NuovoModelloCommand}"
+                                        Classes="primary-btn"
+                                        HorizontalAlignment="Center"/>
+							</StackPanel>
+						</Border>
+
+						<!-- EDITOR -->
+						<Grid IsVisible="{Binding IsEditorVisibile}"
+                              RowDefinitions="Auto,*">
+
+							<Border Grid.Row="0" Background="#F9FAFB" Padding="8,4"
+                                    BorderBrush="#E5E7EB" BorderThickness="0,0,0,1">
+								<StackPanel Orientation="Horizontal" Spacing="4">
+
+									<TextBlock Text="Segnaposto:"
+                                               VerticalAlignment="Center" FontSize="11"
+                                               Foreground="#6B7280" Margin="0,0,6,0"/>
+
+									<ItemsControl ItemsSource="{Binding SegnapostoRapidi}">
+										<ItemsControl.ItemsPanel>
+											<ItemsPanelTemplate>
+												<StackPanel Orientation="Horizontal" Spacing="4"/>
+											</ItemsPanelTemplate>
+										</ItemsControl.ItemsPanel>
+
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<Button Classes="chip-btn"
+														Content="{Binding Label}"
+														Command="{Binding $parent[UserControl].DataContext.InserisciTestoCommand}"
+														CommandParameter="{Binding Valore}"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+
+									<Button Content="+ Personalizzato"
+                                            Command="{Binding InserisciSegnapostoCommand}"
+                                            Classes="chip-btn"/>
+
+								</StackPanel>
+							</Border>
+
+							<TextBox Grid.Row="1"
+                                     Text="{Binding ContenutoEditor}"
+                                     AcceptsReturn="True"
+                                     TextWrapping="Wrap"
+                                     FontFamily="Consolas, Courier New, monospace"
+                                     FontSize="13"
+                                     LineHeight="22"
+                                     Padding="20"
+                                     Background="White"
+                                     BorderThickness="0"
+                                     ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                     ScrollViewer.HorizontalScrollBarVisibility="Disabled"/>
+						</Grid>
+
+						<!-- ANTEPRIMA -->
+						<ScrollViewer IsVisible="{Binding IsAnteprimaVisibile}"
+                                      Background="#FAFBFC"
+                                      Padding="32,24">
+							<Border Background="White"
+                                    BoxShadow="0 2 12 0 #1A000000"
+                                    Padding="56,48"
+                                    MaxWidth="794"
+                                    HorizontalAlignment="Center">
+								<TextBlock Text="{Binding AnteprimaContenuto}"
+                                           TextWrapping="Wrap"
+                                           FontFamily="Georgia, Times New Roman, serif"
+                                           FontSize="13"
+                                           LineHeight="24"
+                                           Foreground="#1F2937"/>
+							</Border>
+						</ScrollViewer>
+
+					</Grid>
+
+					<!-- PANNELLO SEGNAPOSTO -->
+					<Border Grid.Column="1"
+                            Width="{Binding SegnapostoPanelWidth}"
+                            Background="#F8FAFC"
+                            BorderBrush="#E0E8F0"
+                            BorderThickness="1,0,0,0"
+                            IsVisible="{Binding IsSegnapostoPanelVisible}">
+						<Grid RowDefinitions="Auto,Auto,*,Auto">
+
+							<Border Grid.Row="0" Background="#E8EEF6" Padding="12,10">
+								<TextBlock Text="🏷 Segnaposto"
+                                           FontWeight="SemiBold" FontSize="13"
+                                           Foreground="#374151"/>
+							</Border>
+
+							<TextBlock Grid.Row="1"
+                                       Text="Valori da sostituire nel documento generato."
+                                       TextWrapping="Wrap"
+                                       FontSize="11" Foreground="#6B7280"
+                                       Margin="12,8,12,4"/>
+
+							<ScrollViewer Grid.Row="2">
+								<ItemsControl ItemsSource="{Binding SegnapostoItems}" Margin="8,4">
+									<ItemsControl.ItemTemplate>
+										<DataTemplate x:DataType="vm:SegnapostoItem">
+											<Border Margin="0,3" Padding="8,6"
+                                                    Background="White" CornerRadius="6"
+                                                    BorderBrush="#E5E7EB" BorderThickness="1">
+												<StackPanel Spacing="4">
+													<StackPanel Orientation="Horizontal" Spacing="6">
+														<Border Background="#EFF6FF" CornerRadius="3" Padding="4,2">
+															<TextBlock Text="{Binding Chiave}"
+                                                                       FontFamily="Consolas"
+                                                                       FontSize="11" Foreground="#1D4ED8"/>
+														</Border>
+														<TextBlock Text="{Binding Descrizione}"
+                                                                   FontSize="11" Foreground="#9CA3AF"
+                                                                   VerticalAlignment="Center"/>
+													</StackPanel>
+													<TextBox Text="{Binding Valore}"
+                                                             Watermark="{Binding Placeholder}"
+                                                             FontSize="12" Padding="6,4"
+                                                             CornerRadius="4"/>
+												</StackPanel>
+											</Border>
+										</DataTemplate>
+									</ItemsControl.ItemTemplate>
+								</ItemsControl>
+							</ScrollViewer>
+
+							<Button Grid.Row="3"
+                                    Content="▶ Genera documento"
+                                    Command="{Binding GeneraConValoriCommand}"
+                                    Classes="primary-btn"
+                                    HorizontalAlignment="Stretch"
+                                    Margin="8,4,8,8"/>
+						</Grid>
+					</Border>
+
+				</Grid>
+
+				<!-- FOOTER -->
+				<Border Grid.Row="2" Background="White" Padding="16,10"
+                        BorderBrush="#E0E8F0" BorderThickness="0,1,0,0"
+                        IsVisible="{Binding ModelloSelezionato,
+                          Converter={x:Static ObjectConverters.IsNotNull}}">
+					<Grid ColumnDefinitions="Auto,Auto,*,Auto,Auto,Auto,Auto">
+
+						<StackPanel Grid.Column="0" Orientation="Horizontal" Spacing="8"
+                                    VerticalAlignment="Center">
+							<TextBlock Text="Categoria:" FontSize="12"
+                                       Foreground="#6B7280" VerticalAlignment="Center"/>
+							<ComboBox ItemsSource="{Binding CategorieDisponibili}"
+                                      SelectedItem="{Binding CategoriaSelezionata}"
+                                      Width="160" FontSize="12"/>
+						</StackPanel>
+
+						<StackPanel Grid.Column="1" Orientation="Horizontal" Spacing="8"
+                                    Margin="20,0,0,0" VerticalAlignment="Center">
+							<TextBlock Text="Tags:" FontSize="12"
+                                       Foreground="#6B7280" VerticalAlignment="Center"/>
+							<TextBox Text="{Binding TagsEditor}"
+                                     Watermark="es. contratto, lavoro"
+                                     Width="180" FontSize="12" Padding="6,4"/>
+						</StackPanel>
+
+						<Button Grid.Column="3"
+                                Content="📜 Storico"
+                                Command="{Binding ApriStoricoVersioniCommand}"
+                                Classes="secondary-btn"/>
+
+						<TextBox Grid.Column="4"
+                                 Text="{Binding NoteVersione}"
+                                 Watermark="Note versione..."
+                                 Width="180" FontSize="12"
+                                 Padding="6,4" Margin="8,0"/>
+
+						<Button Grid.Column="5"
+                                Content="↩ Annulla"
+                                Command="{Binding AnnullaModificheCommand}"
+                                Classes="secondary-btn"
+                                IsVisible="{Binding HasModifiche}"
+                                Margin="8,0,0,0"/>
+
+						<Button Grid.Column="6"
+                                Content="💾 Salva"
+                                Command="{Binding SalvaModelloCommand}"
+                                Classes="primary-btn"
+                                IsEnabled="{Binding !IsSaving}"
+                                Margin="8,0,0,0"/>
+
+					</Grid>
+				</Border>
+
+			</Grid>
+		</Grid>
+	</Border>
+
+</UserControl>

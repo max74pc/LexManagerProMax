@@ -1,0 +1,7 @@
+<Solution>
+  <Project Path="LexManagerProMax.Application/LexManagerProMax.Application.csproj" Id="9e1fc258-3651-4bed-936f-41797d57cf1a" />
+  <Project Path="LexManagerProMax.AvaloniaApp/LexManagerProMax.AvaloniaApp.csproj" Id="03704c22-7812-49f2-8a91-03f7a14f1750" />
+  <Project Path="LexManagerProMax.Documents/LexManagerProMax.Documents.csproj" Id="577063b3-b967-42da-a8c8-be823bdb7eb7" />
+  <Project Path="LexManagerProMax.Domain/LexManagerProMax.Domain.csproj" Id="06c7852a-65b5-4c55-a660-f1ba583910ec" />
+  <Project Path="LexManagerProMax.Infrastructure/LexManagerProMax.Infrastructure.csproj" Id="6e45872c-0fc8-4eeb-afa7-5d3afefd9888" />
+</Solution>

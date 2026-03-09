@@ -1,0 +1,427 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LexManagerProMax.AvaloniaApp.ViewModels.Anagrafica"
+             x:Class="LexManagerProMax.AvaloniaApp.Views.Anagrafica.SoggettoDetailView"
+             x:DataType="vm:SoggettoDetailViewModel"
+             Width="680">
+
+	<Grid RowDefinitions="Auto,Auto,*,Auto">
+
+		<!-- ── HEADER ── -->
+		<Border Grid.Row="0" Background="#1E2A3A" Padding="20,16">
+			<Grid ColumnDefinitions="*,Auto">
+				<StackPanel Grid.Column="0">
+					<TextBlock Text="{Binding TitoloForm}"
+							   FontSize="18" FontWeight="Bold" Foreground="White"/>
+					<TextBlock Text="{Binding NomeCompletoCalcolato}"
+							   FontSize="13" Foreground="#AAC4E8" Margin="0,2,0,0"
+							   IsVisible="{Binding !IsNuovo}"/>
+				</StackPanel>
+				<Button Grid.Column="1" Content="✕" Classes="close-btn"
+						Command="{Binding AnnullaCommand}"
+						Foreground="White" Background="Transparent"/>
+			</Grid>
+		</Border>
+
+		<!-- ── ALERT ERRORE / SUCCESSO ── -->
+		<StackPanel Grid.Row="1">
+			<Border Background="#FEE2E2" CornerRadius="6" Padding="12,8" Margin="16,8,16,0"
+					IsVisible="{Binding HasFormError}">
+				<TextBlock Text="{Binding ErrorMessage}" Foreground="#991B1B"
+						   TextWrapping="Wrap" FontSize="13"/>
+			</Border>
+			<Border Background="#D1FAE5" CornerRadius="6" Padding="12,8" Margin="16,8,16,0"
+					IsVisible="{Binding SuccessMessage, Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+				<TextBlock Text="{Binding SuccessMessage}" Foreground="#065F46" FontSize="13"/>
+			</Border>
+		</StackPanel>
+
+		<!-- ── TABS ── -->
+		<TabControl Grid.Row="2" SelectedIndex="{Binding TabSelezionato}" Margin="16,8">
+
+			<!-- TAB 1: DATI ANAGRAFICI -->
+			<TabItem Header="📋 Dati">
+				<ScrollViewer Padding="4">
+					<StackPanel Spacing="14">
+
+						<!-- Tipo soggetto -->
+						<Border Classes="form-section">
+							<StackPanel Spacing="10">
+								<TextBlock Text="Tipo soggetto" Classes="field-label"/>
+								<ComboBox ItemsSource="{Binding TipiSoggetto}"
+										  SelectedItem="{Binding TipoSoggetto}"
+										  HorizontalAlignment="Stretch"/>
+							</StackPanel>
+						</Border>
+
+						<!-- Persona Fisica -->
+						<Border Classes="form-section" IsVisible="{Binding IsPersonaFisica}">
+							<StackPanel Spacing="12">
+								<TextBlock Text="Dati Persona Fisica" Classes="section-title"/>
+								<Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto,Auto">
+
+									<!-- Cognome -->
+									<!-- FIX: sostituito (DataValidationErrors.Errors)[0] con
+									         ItemsControl + ElementName (indexer non supportato in Avalonia) -->
+									<StackPanel Grid.Row="0" Grid.Column="0" Margin="0,0,8,0">
+										<TextBlock Text="Cognome *" Classes="field-label"/>
+										<TextBox Name="CognomeBox"
+												 Text="{Binding Cognome}"
+												 Classes="form-input"/>
+										<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																	 ElementName=CognomeBox}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding}"
+															   Foreground="#DC2626"
+															   FontSize="11"
+															   Margin="0,2,0,0"/>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+
+									<!-- Nome -->
+									<StackPanel Grid.Row="0" Grid.Column="1">
+										<TextBlock Text="Nome *" Classes="field-label"/>
+										<TextBox Name="NomeBox"
+												 Text="{Binding Nome}"
+												 Classes="form-input"/>
+										<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																	 ElementName=NomeBox}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding}"
+															   Foreground="#DC2626"
+															   FontSize="11"
+															   Margin="0,2,0,0"/>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+
+									<!-- Codice Fiscale -->
+									<!-- FIX: rimosso Margin2 (attributo inesistente) -->
+									<StackPanel Grid.Row="1" Grid.Column="0" Margin="0,10,8,0">
+										<TextBlock Text="Codice Fiscale" Classes="field-label"/>
+										<Grid ColumnDefinitions="*,Auto">
+											<TextBox Grid.Column="0"
+													 Name="CodiceFiscaleBox"
+													 Text="{Binding CodiceFiscale}"
+													 MaxLength="16"
+													 Classes="form-input monospace"/>
+											<Button Grid.Column="1" Content="📋" ToolTip.Tip="Copia"
+													Command="{Binding CopiaCfCommand}"
+													Classes="icon-btn" Margin="4,0,0,0"/>
+										</Grid>
+										<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																	 ElementName=CodiceFiscaleBox}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding}"
+															   Foreground="#DC2626"
+															   FontSize="11"
+															   Margin="0,2,0,0"/>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+
+									<!-- Sesso -->
+									<StackPanel Grid.Row="1" Grid.Column="1" Margin="0,10,0,0">
+										<TextBlock Text="Sesso" Classes="field-label"/>
+										<ComboBox SelectedItem="{Binding Sesso}"
+												  HorizontalAlignment="Stretch">
+											<ComboBoxItem>M</ComboBoxItem>
+											<ComboBoxItem>F</ComboBoxItem>
+										</ComboBox>
+									</StackPanel>
+
+									<!-- Data nascita -->
+									<StackPanel Grid.Row="2" Grid.Column="0" Margin="0,10,8,0">
+										<TextBlock Text="Data di nascita" Classes="field-label"/>
+										<DatePicker SelectedDate="{Binding DataNascita}"
+													HorizontalAlignment="Stretch"/>
+									</StackPanel>
+
+									<!-- Luogo nascita -->
+									<StackPanel Grid.Row="2" Grid.Column="1" Margin="0,10,0,0">
+										<TextBlock Text="Luogo di nascita" Classes="field-label"/>
+										<TextBox Text="{Binding LuogoNascita}" Classes="form-input"/>
+									</StackPanel>
+
+								</Grid>
+							</StackPanel>
+						</Border>
+
+						<!-- Persona Giuridica -->
+						<Border Classes="form-section" IsVisible="{Binding IsPersonaGiuridica}">
+							<StackPanel Spacing="12">
+								<TextBlock Text="Dati Persona Giuridica" Classes="section-title"/>
+
+								<StackPanel>
+									<TextBlock Text="Ragione Sociale *" Classes="field-label"/>
+									<TextBox Name="RagioneSocialeBox"
+											 Text="{Binding RagioneSociale}"
+											 Classes="form-input"/>
+									<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																 ElementName=RagioneSocialeBox}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding}"
+														   Foreground="#DC2626"
+														   FontSize="11"
+														   Margin="0,2,0,0"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+
+								<Grid ColumnDefinitions="*,*">
+									<StackPanel Grid.Column="0" Margin="0,0,8,0">
+										<TextBlock Text="Partita IVA" Classes="field-label"/>
+										<Grid ColumnDefinitions="*,Auto">
+											<TextBox Grid.Column="0"
+													 Name="PartitaIvaBox"
+													 Text="{Binding PartitaIva}"
+													 MaxLength="11"
+													 Classes="form-input monospace"/>
+											<Button Grid.Column="1" Content="📋" ToolTip.Tip="Copia"
+													Command="{Binding CopiaCfCommand}"
+													Classes="icon-btn" Margin="4,0,0,0"/>
+										</Grid>
+										<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																	 ElementName=PartitaIvaBox}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding}"
+															   Foreground="#DC2626"
+															   FontSize="11"
+															   Margin="0,2,0,0"/>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+									<StackPanel Grid.Column="1">
+										<TextBlock Text="Forma Giuridica" Classes="field-label"/>
+										<ComboBox ItemsSource="{Binding FormeGiuridiche}"
+												  SelectedItem="{Binding FormaGiuridica}"
+												  HorizontalAlignment="Stretch"/>
+									</StackPanel>
+								</Grid>
+
+							</StackPanel>
+						</Border>
+
+						<!-- Ruoli -->
+						<Border Classes="form-section">
+							<StackPanel Spacing="10">
+								<TextBlock Text="Ruolo nel procedimento" Classes="section-title"/>
+								<StackPanel Orientation="Horizontal" Spacing="24">
+									<CheckBox IsChecked="{Binding IsCliente}"     Content="👤 Cliente"/>
+									<CheckBox IsChecked="{Binding IsControparte}" Content="⚔️ Controparte"/>
+									<CheckBox IsChecked="{Binding IsTerzo}"       Content="👁 Terzo"/>
+								</StackPanel>
+								<ComboBox ItemsSource="{Binding CategorieClienti}"
+										  SelectedItem="{Binding CategoriaCliente}"
+										  PlaceholderText="Categoria cliente..."
+										  HorizontalAlignment="Stretch"
+										  IsVisible="{Binding IsCliente}"/>
+							</StackPanel>
+						</Border>
+
+					</StackPanel>
+				</ScrollViewer>
+			</TabItem>
+
+			<!-- TAB 2: RECAPITI -->
+			<TabItem Header="📞 Recapiti">
+				<ScrollViewer Padding="4">
+					<StackPanel Spacing="14">
+
+						<Border Classes="form-section">
+							<StackPanel Spacing="12">
+								<TextBlock Text="Contatti digitali" Classes="section-title"/>
+
+								<StackPanel>
+									<TextBlock Text="Email" Classes="field-label"/>
+									<TextBox Name="EmailBox"
+											 Text="{Binding Email}"
+											 Watermark="esempio@dominio.it"
+											 Classes="form-input"/>
+									<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																 ElementName=EmailBox}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding}"
+														   Foreground="#DC2626"
+														   FontSize="11"
+														   Margin="0,2,0,0"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+
+								<StackPanel>
+									<TextBlock Text="PEC" Classes="field-label"/>
+									<TextBox Name="PecBox"
+											 Text="{Binding Pec}"
+											 Watermark="esempio@pec.it"
+											 Classes="form-input"/>
+									<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																 ElementName=PecBox}">
+										<ItemsControl.ItemTemplate>
+											<DataTemplate>
+												<TextBlock Text="{Binding}"
+														   Foreground="#DC2626"
+														   FontSize="11"
+														   Margin="0,2,0,0"/>
+											</DataTemplate>
+										</ItemsControl.ItemTemplate>
+									</ItemsControl>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+
+						<Border Classes="form-section">
+							<StackPanel Spacing="12">
+								<TextBlock Text="Telefoni" Classes="section-title"/>
+								<Grid ColumnDefinitions="*,*">
+									<StackPanel Grid.Column="0" Margin="0,0,8,0">
+										<TextBlock Text="Telefono fisso" Classes="field-label"/>
+										<TextBox Text="{Binding Telefono}" Watermark="+39 02..."
+												 Classes="form-input"/>
+									</StackPanel>
+									<StackPanel Grid.Column="1">
+										<TextBlock Text="Cellulare" Classes="field-label"/>
+										<TextBox Text="{Binding Cellulare}" Watermark="+39 333..."
+												 Classes="form-input"/>
+									</StackPanel>
+								</Grid>
+								<StackPanel>
+									<TextBlock Text="Fax" Classes="field-label"/>
+									<TextBox Text="{Binding Fax}" Classes="form-input"/>
+								</StackPanel>
+							</StackPanel>
+						</Border>
+
+					</StackPanel>
+				</ScrollViewer>
+			</TabItem>
+
+			<!-- TAB 3: INDIRIZZO -->
+			<TabItem Header="📍 Indirizzo">
+				<ScrollViewer Padding="4">
+					<StackPanel Spacing="14">
+
+						<Border Classes="form-section">
+							<StackPanel Spacing="12">
+								<TextBlock Text="Sede / Residenza" Classes="section-title"/>
+
+								<Grid ColumnDefinitions="*,80">
+									<StackPanel Grid.Column="0" Margin="0,0,8,0">
+										<TextBlock Text="Via / Piazza" Classes="field-label"/>
+										<TextBox Text="{Binding Via}" Classes="form-input"/>
+									</StackPanel>
+									<StackPanel Grid.Column="1">
+										<TextBlock Text="Civico" Classes="field-label"/>
+										<TextBox Text="{Binding Civico}" Classes="form-input"/>
+									</StackPanel>
+								</Grid>
+
+								<Grid ColumnDefinitions="80,*,60">
+									<StackPanel Grid.Column="0" Margin="0,0,8,0">
+										<TextBlock Text="CAP" Classes="field-label"/>
+										<TextBox Text="{Binding Cap}" MaxLength="5" Classes="form-input"/>
+									</StackPanel>
+									<StackPanel Grid.Column="1" Margin="0,0,8,0">
+										<TextBlock Text="Città" Classes="field-label"/>
+										<TextBox Text="{Binding Citta}" Classes="form-input"/>
+									</StackPanel>
+									<StackPanel Grid.Column="2">
+										<TextBlock Text="Prov." Classes="field-label"/>
+										<TextBox Name="ProvinciaBox"
+												 Text="{Binding Provincia}"
+												 MaxLength="2"
+												 Classes="form-input monospace"/>
+										<ItemsControl ItemsSource="{Binding (DataValidationErrors.Errors),
+																	 ElementName=ProvinciaBox}">
+											<ItemsControl.ItemTemplate>
+												<DataTemplate>
+													<TextBlock Text="{Binding}"
+															   Foreground="#DC2626"
+															   FontSize="11"
+															   Margin="0,2,0,0"/>
+												</DataTemplate>
+											</ItemsControl.ItemTemplate>
+										</ItemsControl>
+									</StackPanel>
+								</Grid>
+
+								<StackPanel>
+									<TextBlock Text="Nazione" Classes="field-label"/>
+									<TextBox Text="{Binding Nazione}" Classes="form-input"/>
+								</StackPanel>
+
+								<Border Background="#F8FAFC" CornerRadius="6" Padding="10,8"
+										IsVisible="{Binding IndirizzoCompleto,
+                                    Converter={x:Static StringConverters.IsNotNullOrEmpty}}">
+									<StackPanel>
+										<TextBlock Text="Anteprima indirizzo" FontSize="11"
+												   Foreground="#6B7280" Margin="0,0,0,4"/>
+										<TextBlock Text="{Binding IndirizzoCompleto}"
+												   Foreground="#374151" TextWrapping="Wrap"/>
+									</StackPanel>
+								</Border>
+
+							</StackPanel>
+						</Border>
+
+					</StackPanel>
+				</ScrollViewer>
+			</TabItem>
+
+			<!-- TAB 4: NOTE -->
+			<TabItem Header="📝 Note">
+				<ScrollViewer Padding="4">
+					<Border Classes="form-section">
+						<StackPanel Spacing="10">
+							<TextBlock Text="Note libere" Classes="section-title"/>
+							<TextBox Text="{Binding Note}"
+									 AcceptsReturn="True"
+									 MinHeight="200"
+									 TextWrapping="Wrap"
+									 Watermark="Annotazioni, riferimenti, osservazioni..."
+									 Classes="form-input"/>
+						</StackPanel>
+					</Border>
+				</ScrollViewer>
+			</TabItem>
+
+		</TabControl>
+
+		<!-- ── FOOTER AZIONI ── -->
+		<Border Grid.Row="3" Background="White" Padding="16,12"
+				BorderBrush="#E0E8F0" BorderThickness="0,1,0,0">
+			<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+
+				<Button Grid.Column="0" Content="↩ Ripristina" Classes="flat-btn"
+						Command="{Binding ResetFormCommand}"/>
+
+				<ProgressBar Grid.Column="1" IsIndeterminate="True" Height="3"
+							 IsVisible="{Binding IsSaving}"
+							 Margin="12,0" VerticalAlignment="Center"/>
+
+				<Button Grid.Column="2" Content="Annulla" Classes="secondary-btn"
+						Command="{Binding AnnullaCommand}" Margin="0,0,8,0"/>
+
+				<Button Grid.Column="3" Content="💾 Salva"
+						Command="{Binding SalvaCommand}"
+						IsEnabled="{Binding !IsSaving}"
+						Classes="primary-btn"/>
+
+			</Grid>
+		</Border>
+
+	</Grid>
+</UserControl>

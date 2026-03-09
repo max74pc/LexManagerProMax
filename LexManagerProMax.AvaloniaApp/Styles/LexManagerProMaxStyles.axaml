@@ -1,0 +1,70 @@
+<Styles xmlns="https://github.com/avaloniaui"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
+
+	<!-- Bottone primario -->
+	<Style Selector="Button.primary-btn">
+		<Setter Property="Background" Value="#2563EB"/>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Padding" Value="14,8"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+	<Style Selector="Button.primary-btn:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="#1D4ED8"/>
+	</Style>
+
+	<!-- Bottone secondario -->
+	<Style Selector="Button.secondary-btn">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="Foreground" Value="#374151"/>
+		<Setter Property="BorderBrush" Value="#D1D5DB"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Padding" Value="14,8"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- Hamburger / flat white -->
+	<Style Selector="Button.hamburger">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Padding" Value="6"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- Nav item sidebar -->
+	<Style Selector="Button.nav-item">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Foreground" Value="#CBD5E1"/>
+		<Setter Property="HorizontalAlignment" Value="Stretch"/>
+		<Setter Property="HorizontalContentAlignment" Value="Left"/>
+		<Setter Property="Padding" Value="8,10"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+	<Style Selector="Button.nav-item:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="#2D4A6A"/>
+	</Style>
+
+	<!-- Chip buttons (AI quick prompts) -->
+	<Style Selector="Button.chip-btn">
+		<Setter Property="Background" Value="#EFF6FF"/>
+		<Setter Property="Foreground" Value="#1D4ED8"/>
+		<Setter Property="BorderBrush" Value="#BFDBFE"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="Padding" Value="10,4"/>
+		<Setter Property="CornerRadius" Value="16"/>
+		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- Chat input -->
+	<Style Selector="TextBox.chat-input">
+		<Setter Property="MinHeight" Value="44"/>
+		<Setter Property="Padding" Value="12,10"/>
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="BorderBrush" Value="#D1D5DB"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="FontSize" Value="14"/>
+	</Style>
+
+</Styles>

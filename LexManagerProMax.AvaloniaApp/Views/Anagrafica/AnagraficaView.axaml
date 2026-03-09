@@ -1,0 +1,174 @@
+<UserControl xmlns="https://github.com/avaloniaui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:vm="using:LexManagerProMax.AvaloniaApp.ViewModels.Anagrafica"
+             xmlns:domain="using:LexManagerProMax.Domain.Entities.Anagrafica"
+             xmlns:i="using:Avalonia.Xaml.Interactivity"
+             xmlns:ia="using:Avalonia.Xaml.Interactions.Core"
+             x:Class="LexManagerProMax.AvaloniaApp.Views.Anagrafica.AnagraficaView"
+             x:DataType="vm:AnagraficaViewModel">
+
+	<Grid RowDefinitions="Auto,*">
+
+		<!-- ── TOOLBAR ── -->
+		<Border Grid.Row="0" Background="White" Padding="16,12"
+				BorderBrush="#E0E8F0" BorderThickness="0,0,0,1">
+			<Grid ColumnDefinitions="Auto,*,Auto,Auto">
+				<TextBlock Grid.Column="0" Text="👥 Anagrafica"
+						   FontSize="20" FontWeight="Bold" Foreground="#1E2A3A"
+						   VerticalAlignment="Center"/>
+				<TextBox Grid.Column="1"
+						 Watermark="🔍 Cerca per nome, CF, P.IVA..."
+						 Text="{Binding SearchText}"
+						 Margin="20,0" MaxWidth="400"
+						 Classes="search-box">
+					<i:Interaction.Behaviors>
+						<ia:EventTriggerBehavior EventName="KeyUp">
+							<ia:InvokeCommandAction Command="{Binding SearchCommand}"/>
+						</ia:EventTriggerBehavior>
+					</i:Interaction.Behaviors>
+				</TextBox>
+				<Button Grid.Column="2" Content="+ Nuovo Soggetto"
+						Command="{Binding NuovoSoggettoCommand}"
+						Classes="primary-btn" Margin="8,0"/>
+				<Button Grid.Column="3" Content="📥 Importa"
+						Classes="secondary-btn"/>
+			</Grid>
+		</Border>
+
+		<!-- ── LISTA SOGGETTI ── -->
+		<Grid Grid.Row="1" RowDefinitions="Auto,*">
+
+			<!-- Intestazione colonne fissa -->
+			<Border Grid.Row="0" Background="#F1F5F9"
+					BorderBrush="#E0E8F0" BorderThickness="0,0,0,1"
+					Padding="12,8">
+				<Grid ColumnDefinitions="120,*,140,200,130,120,100,80">
+					<TextBlock Grid.Column="0" Text="Tipo"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="1" Text="Nome / Ragione Sociale"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="2" Text="CF / P.IVA"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="3" Text="Email"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="4" Text="Telefono"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="5" Text="Città"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="6" Text="Ruolo"
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+					<TextBlock Grid.Column="7" Text=""
+							   FontSize="12" FontWeight="SemiBold" Foreground="#6B7280"/>
+				</Grid>
+			</Border>
+
+			<!-- Stato vuoto -->
+			<Border Grid.Row="1"
+					IsVisible="{Binding IsLoading}"
+					VerticalAlignment="Center" HorizontalAlignment="Center">
+				<TextBlock Text="Caricamento..." FontSize="14" Foreground="#9CA3AF"/>
+			</Border>
+
+			<!-- Righe -->
+			<ScrollViewer Grid.Row="1"
+						  IsVisible="{Binding !IsLoading}"
+						  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+				<ItemsControl ItemsSource="{Binding Soggetti}">
+					<ItemsControl.ItemTemplate>
+						<DataTemplate x:DataType="domain:Soggetto">
+							<Border Background="White"
+									BorderBrush="#F1F5F9"
+									BorderThickness="0,0,0,1"
+									Padding="12,0">
+
+								<Border.Styles>
+									<Style Selector="Border:pointerover">
+										<Setter Property="Background" Value="#EEF3FF"/>
+										<Setter Property="Cursor" Value="Hand"/>
+									</Style>
+								</Border.Styles>
+
+								<Grid ColumnDefinitions="120,*,140,200,130,120,100,80"
+									  Height="44">
+
+									<!-- Tipo -->
+									<Border Grid.Column="0" VerticalAlignment="Center">
+										<Border Background="#DBEAFE" CornerRadius="4"
+												Padding="6,2" HorizontalAlignment="Left">
+											<TextBlock Text="{Binding Tipo}"
+													   FontSize="11" Foreground="#1D4ED8"/>
+										</Border>
+									</Border>
+
+									<!-- Nome -->
+									<TextBlock Grid.Column="1"
+											   Text="{Binding NomeCompleto}"
+											   FontSize="13" FontWeight="SemiBold"
+											   Foreground="#1F2937"
+											   VerticalAlignment="Center"
+											   TextTrimming="CharacterEllipsis"/>
+
+									<!-- CF / P.IVA -->
+									<TextBlock Grid.Column="2"
+											   Text="{Binding CodiceFiscale}"
+											   FontSize="12" Foreground="#374151"
+											   FontFamily="Consolas, monospace"
+											   VerticalAlignment="Center"
+											   TextTrimming="CharacterEllipsis"/>
+
+									<!-- Email -->
+									<TextBlock Grid.Column="3"
+											   Text="{Binding Email}"
+											   FontSize="12" Foreground="#6B7280"
+											   VerticalAlignment="Center"
+											   TextTrimming="CharacterEllipsis"/>
+
+									<!-- Telefono -->
+									<TextBlock Grid.Column="4"
+											   Text="{Binding Telefono}"
+											   FontSize="12" Foreground="#6B7280"
+											   VerticalAlignment="Center"/>
+
+									<!-- Città -->
+									<TextBlock Grid.Column="5"
+											   Text="{Binding Citta}"
+											   FontSize="12" Foreground="#6B7280"
+											   VerticalAlignment="Center"/>
+
+									<!-- Ruolo -->
+									<StackPanel Grid.Column="6"
+												Orientation="Horizontal" Spacing="4"
+												VerticalAlignment="Center">
+										<Border Background="#D1FAE5" CornerRadius="4"
+												Padding="4,2"
+												IsVisible="{Binding IsCliente}">
+											<TextBlock Text="Cliente"
+													   FontSize="11" Foreground="#065F46"/>
+										</Border>
+										<Border Background="#FEE2E2" CornerRadius="4"
+												Padding="4,2"
+												IsVisible="{Binding IsControparte}">
+											<TextBlock Text="Controparte"
+													   FontSize="11" Foreground="#991B1B"/>
+										</Border>
+									</StackPanel>
+
+									<!-- Azioni -->
+									<Button Grid.Column="7"
+											Content="✏️"
+											Classes="icon-btn"
+											VerticalAlignment="Center"
+											Command="{Binding $parent[UserControl].((vm:AnagraficaViewModel)DataContext).ApriDettaglioCommand}"
+											CommandParameter="{Binding}"/>
+
+								</Grid>
+							</Border>
+						</DataTemplate>
+					</ItemsControl.ItemTemplate>
+				</ItemsControl>
+			</ScrollViewer>
+
+		</Grid>
+
+	</Grid>
+</UserControl>
