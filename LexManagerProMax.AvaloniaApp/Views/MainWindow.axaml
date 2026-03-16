@@ -7,14 +7,15 @@
         Title="LexManagerProMax — Studio Legale"
         Width="1400" Height="860"
         MinWidth="1024" MinHeight="600"
-        WindowStartupLocation="CenterScreen">
+        WindowStartupLocation="CenterScreen"
+        WindowState="Maximized">
 
 	<Grid RowDefinitions="Auto,*,Auto">
 
 		<!-- ═══════════════════════════════════════════════════ -->
-		<!-- ZONA 1: MENU BAR IN ALTO                            -->
+		<!-- ZONA 1: MENU BAR IN ALTO — azzurro pastello medio  -->
 		<!-- ═══════════════════════════════════════════════════ -->
-		<Grid Grid.Row="0" Background="#1E2A3A">
+		<Grid Grid.Row="0" Background="#C8DCF0">
 			<Grid ColumnDefinitions="Auto,*,Auto">
 
 				<!-- Logo + Hamburger -->
@@ -23,15 +24,17 @@
 							Classes="hamburger"
 							ToolTip.Tip="Mostra/Nascondi navigazione">
 						<PathIcon Data="M3,6H21V8H3V6M3,11H21V13H3V11M3,16H21V18H3V16Z"
-								  Width="20" Height="20" Foreground="White"/>
+								  Width="20" Height="20" Foreground="#1E3A5F"/>
 					</Button>
-					<TextBlock Text="⚖ LexManager" FontSize="18" FontWeight="Bold"
-							   Foreground="White" VerticalAlignment="Center"/>
+					<TextBlock Text="⚖ LexManager" FontSize="20" FontWeight="Bold"
+							   Foreground="#1E3A5F" VerticalAlignment="Center"/>
 				</StackPanel>
 
 				<!-- Menu classico -->
-				<Menu Grid.Column="1" Background="Transparent" VerticalAlignment="Center" Margin="20,0">
-					<MenuItem Header="_File" Foreground="White">
+				<Menu Grid.Column="1" Background="Transparent"
+					  VerticalAlignment="Center" Margin="20,0"
+					  FontSize="15">
+					<MenuItem Header="_File" Foreground="#1E3A5F">
 						<MenuItem Header="Nuovo Fascicolo"  Command="{Binding NuovoFascicoloCommand}"/>
 						<MenuItem Header="Nuovo Soggetto"   Command="{Binding NuovoSoggettoCommand}"/>
 						<Separator/>
@@ -39,16 +42,16 @@
 						<Separator/>
 						<MenuItem Header="Esci"             Command="{Binding EsciCommand}"/>
 					</MenuItem>
-					<MenuItem Header="_Visualizza" Foreground="White">
+					<MenuItem Header="_Visualizza" Foreground="#1E3A5F">
 						<MenuItem Header="Pannello destro" Command="{Binding ToggleRightPanelCommand}"/>
 						<MenuItem Header="Barra di stato"  Command="{Binding ToggleStatusBarCommand}"/>
 					</MenuItem>
-					<MenuItem Header="_Strumenti" Foreground="White">
-						<MenuItem Header="Calcola Scadenze"    Command="{Binding NavigateToCommand}" CommandParameter="Utilita"/>
-						<MenuItem Header="Generatore Atti"     Command="{Binding NavigateToCommand}" CommandParameter="Atti"/>
-						<MenuItem Header="Assistente AI"       Command="{Binding NavigateToCommand}" CommandParameter="AI"/>
+					<MenuItem Header="_Strumenti" Foreground="#1E3A5F">
+						<MenuItem Header="Calcola Scadenze" Command="{Binding NavigateToCommand}" CommandParameter="Utilita"/>
+						<MenuItem Header="Generatore Atti"  Command="{Binding NavigateToCommand}" CommandParameter="Atti"/>
+						<MenuItem Header="Assistente AI"    Command="{Binding NavigateToCommand}" CommandParameter="AI"/>
 					</MenuItem>
-					<MenuItem Header="_Aiuto" Foreground="White">
+					<MenuItem Header="_Aiuto" Foreground="#1E3A5F">
 						<MenuItem Header="Documentazione"/>
 						<MenuItem Header="Informazioni su LexManager"/>
 					</MenuItem>
@@ -56,9 +59,10 @@
 
 				<!-- User area -->
 				<StackPanel Grid.Column="2" Orientation="Horizontal" Spacing="8" Margin="8,4">
-					<TextBlock Text="{Binding UtenteCorrente}" Foreground="#AAC4E8"
-							   VerticalAlignment="Center" FontSize="13"/>
-					<Button Classes="flat-white" Content="👤" FontSize="16"/>
+					<TextBlock Text="{Binding UtenteCorrente}" Foreground="#1E3A5F"
+							   VerticalAlignment="Center" FontSize="14"/>
+					<Button Classes="flat-white" Content="👤" FontSize="18"
+							Foreground="#1E3A5F"/>
 				</StackPanel>
 			</Grid>
 		</Grid>
@@ -69,12 +73,12 @@
 		<Grid Grid.Row="1" ColumnDefinitions="Auto,*,Auto">
 
 			<!-- ─────────────────────────────────────────────── -->
-			<!-- ZONA 2: NAVIGAZIONE SINISTRA (collassabile)     -->
+			<!-- ZONA 2: NAVIGAZIONE SINISTRA — azzurro chiaro  -->
 			<!-- ─────────────────────────────────────────────── -->
 			<Border Grid.Column="0"
 					Width="{Binding SidebarWidth}"
-					Background="#253347"
-					BorderBrush="#1A2535"
+					Background="#D6E8F7"
+					BorderBrush="#A8C8E8"
 					BorderThickness="0,0,1,0">
 				<ScrollViewer>
 					<StackPanel Margin="0,12,0,0">
@@ -95,11 +99,15 @@
 											Classes="nav-item"
 											IsEnabled="True">
 										<Grid ColumnDefinitions="32,*">
-											<TextBlock Grid.Column="0" Text="{Binding Icon}" FontSize="18"
-													   HorizontalAlignment="Center" VerticalAlignment="Center"/>
+											<TextBlock Grid.Column="0" Text="{Binding Icon}"
+													   FontSize="20"
+													   HorizontalAlignment="Center"
+													   VerticalAlignment="Center"/>
 											<TextBlock Grid.Column="1" Text="{Binding Label}"
 													   IsVisible="{Binding $parent[Window].DataContext.IsSidebarExpanded}"
-													   VerticalAlignment="Center" Foreground="White"
+													   VerticalAlignment="Center"
+													   Foreground="#1E3A5F"
+													   FontSize="15"
 													   Margin="8,0,0,0"/>
 										</Grid>
 									</Button>
@@ -131,7 +139,7 @@
 					<Border Grid.Row="0" Background="#E8EEF6" Padding="12,8">
 						<Grid ColumnDefinitions="*,Auto">
 							<TextBlock Grid.Column="0" Text="{Binding RightPanelTitle}"
-									   FontWeight="SemiBold" FontSize="13"/>
+									   FontWeight="SemiBold" FontSize="14"/>
 							<Button Grid.Column="1" Content="✕" Classes="close-btn"
 									Command="{Binding ToggleRightPanelCommand}"/>
 						</Grid>
@@ -146,16 +154,18 @@
 		<!-- ZONA 5: BARRA DI STATO IN BASSO                    -->
 		<!-- ═══════════════════════════════════════════════════ -->
 		<Border Grid.Row="2"
-				Background="#1E2A3A"
-				Height="26"
+				Background="#C8DCF0"
+				Height="28"
 				IsVisible="{Binding IsStatusBarVisible}">
 			<Grid ColumnDefinitions="*,Auto,Auto,Auto" Margin="8,0">
 				<TextBlock Grid.Column="0" Text="{Binding StatusMessage}"
-						   Foreground="#AAC4E8" FontSize="11" VerticalAlignment="Center"/>
+						   Foreground="#1E3A5F" FontSize="12" VerticalAlignment="Center"/>
 				<TextBlock Grid.Column="1" Text="{Binding DbStatus}"
-						   Foreground="#7ACCA8" FontSize="11" VerticalAlignment="Center" Margin="0,0,16,0"/>
+						   Foreground="#1E6B4A" FontSize="12" VerticalAlignment="Center"
+						   Margin="0,0,16,0"/>
 				<TextBlock Grid.Column="2" Text="{Binding CurrentDateTime}"
-						   Foreground="#AAC4E8" FontSize="11" VerticalAlignment="Center" Margin="0,0,16,0"/>
+						   Foreground="#1E3A5F" FontSize="12" VerticalAlignment="Center"
+						   Margin="0,0,16,0"/>
 				<ProgressBar Grid.Column="3" Width="80" Height="6"
 							 Value="{Binding BusyProgress}"
 							 IsVisible="{Binding IsBusy}"

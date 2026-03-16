@@ -1,13 +1,22 @@
 <Styles xmlns="https://github.com/avaloniaui"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml">
 
+	<!-- ══════════════════════════════════════════════════════════
+	     PALETTE COLORI TEMA
+	     Barra menu top:  #C8DCF0  (azzurro pastello medio)
+	     Sidebar sinistra: #D6E8F7 (azzurro pastello chiaro)
+	     Hover sidebar:    #B8D4EC
+	     Testo sidebar:    #1E3A5F
+	     ══════════════════════════════════════════════════════════ -->
+
 	<!-- Bottone primario -->
 	<Style Selector="Button.primary-btn">
 		<Setter Property="Background" Value="#2563EB"/>
 		<Setter Property="Foreground" Value="White"/>
-		<Setter Property="Padding" Value="14,8"/>
+		<Setter Property="Padding" Value="16,10"/>
 		<Setter Property="CornerRadius" Value="6"/>
 		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="FontSize" Value="15"/>
 		<Setter Property="Cursor" Value="Hand"/>
 	</Style>
 	<Style Selector="Button.primary-btn:pointerover /template/ ContentPresenter">
@@ -20,51 +29,156 @@
 		<Setter Property="Foreground" Value="#374151"/>
 		<Setter Property="BorderBrush" Value="#D1D5DB"/>
 		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="Padding" Value="14,8"/>
+		<Setter Property="Padding" Value="16,10"/>
 		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="FontSize" Value="15"/>
 		<Setter Property="Cursor" Value="Hand"/>
 	</Style>
 
-	<!-- Hamburger / flat white -->
+	<!-- Bottone flat -->
+	<Style Selector="Button.flat-btn">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Foreground" Value="#374151"/>
+		<Setter Property="Padding" Value="10,8"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- Bottone icona pericolo -->
+	<Style Selector="Button.danger-icon-btn">
+		<Setter Property="Background" Value="#FEE2E2"/>
+		<Setter Property="Foreground" Value="#DC2626"/>
+		<Setter Property="Padding" Value="8,6"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="FontSize" Value="15"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- Bottone icona generico -->
+	<Style Selector="Button.icon-btn">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Padding" Value="6"/>
+		<Setter Property="FontSize" Value="15"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- Hamburger -->
 	<Style Selector="Button.hamburger">
 		<Setter Property="Background" Value="Transparent"/>
 		<Setter Property="Padding" Value="6"/>
 		<Setter Property="Cursor" Value="Hand"/>
 	</Style>
+	<Style Selector="Button.hamburger:pointerover /template/ ContentPresenter">
+		<Setter Property="Background" Value="#B8D4EC"/>
+	</Style>
 
-	<!-- Nav item sidebar -->
+	<!-- Nav item sidebar — testo scuro su sfondo azzurro chiaro -->
 	<Style Selector="Button.nav-item">
 		<Setter Property="Background" Value="Transparent"/>
-		<Setter Property="Foreground" Value="#CBD5E1"/>
+		<Setter Property="Foreground" Value="#1E3A5F"/>
 		<Setter Property="HorizontalAlignment" Value="Stretch"/>
 		<Setter Property="HorizontalContentAlignment" Value="Left"/>
-		<Setter Property="Padding" Value="8,10"/>
+		<Setter Property="Padding" Value="10,12"/>
+		<Setter Property="FontSize" Value="15"/>
 		<Setter Property="Cursor" Value="Hand"/>
 	</Style>
 	<Style Selector="Button.nav-item:pointerover /template/ ContentPresenter">
-		<Setter Property="Background" Value="#2D4A6A"/>
+		<Setter Property="Background" Value="#B8D4EC"/>
 	</Style>
 
-	<!-- Chip buttons (AI quick prompts) -->
+	<!-- Chip buttons -->
 	<Style Selector="Button.chip-btn">
 		<Setter Property="Background" Value="#EFF6FF"/>
 		<Setter Property="Foreground" Value="#1D4ED8"/>
 		<Setter Property="BorderBrush" Value="#BFDBFE"/>
 		<Setter Property="BorderThickness" Value="1"/>
-		<Setter Property="Padding" Value="10,4"/>
+		<Setter Property="Padding" Value="12,5"/>
 		<Setter Property="CornerRadius" Value="16"/>
-		<Setter Property="FontSize" Value="12"/>
+		<Setter Property="FontSize" Value="13"/>
 		<Setter Property="Cursor" Value="Hand"/>
 	</Style>
 
 	<!-- Chat input -->
 	<Style Selector="TextBox.chat-input">
-		<Setter Property="MinHeight" Value="44"/>
-		<Setter Property="Padding" Value="12,10"/>
+		<Setter Property="MinHeight" Value="48"/>
+		<Setter Property="Padding" Value="14,12"/>
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="BorderBrush" Value="#D1D5DB"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="FontSize" Value="15"/>
+	</Style>
+
+	<!-- Search box -->
+	<Style Selector="TextBox.search-box">
+		<Setter Property="Padding" Value="12,8"/>
 		<Setter Property="CornerRadius" Value="8"/>
 		<Setter Property="BorderBrush" Value="#D1D5DB"/>
 		<Setter Property="BorderThickness" Value="1"/>
 		<Setter Property="FontSize" Value="14"/>
+	</Style>
+
+	<!-- Sidebar search -->
+	<Style Selector="TextBox.sidebar-search">
+		<Setter Property="Padding" Value="10,8"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="FontSize" Value="14"/>
+		<Setter Property="Background" Value="#FFFFFF"/>
+		<Setter Property="BorderBrush" Value="#A8C8E8"/>
+	</Style>
+
+	<!-- Form section card -->
+	<Style Selector="Border.form-section">
+		<Setter Property="Background" Value="White"/>
+		<Setter Property="CornerRadius" Value="8"/>
+		<Setter Property="Padding" Value="16"/>
+		<Setter Property="BorderBrush" Value="#E5E7EB"/>
+		<Setter Property="BorderThickness" Value="1"/>
+	</Style>
+
+	<!-- Field label -->
+	<Style Selector="TextBlock.field-label">
+		<Setter Property="FontSize" Value="13"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="Foreground" Value="#374151"/>
+		<Setter Property="Margin" Value="0,0,0,4"/>
+	</Style>
+
+	<!-- Section title -->
+	<Style Selector="TextBlock.section-title">
+		<Setter Property="FontSize" Value="15"/>
+		<Setter Property="FontWeight" Value="SemiBold"/>
+		<Setter Property="Foreground" Value="#1E2A3A"/>
+	</Style>
+
+	<!-- Form input -->
+	<Style Selector="TextBox.form-input">
+		<Setter Property="Padding" Value="10,8"/>
+		<Setter Property="CornerRadius" Value="6"/>
+		<Setter Property="BorderBrush" Value="#D1D5DB"/>
+		<Setter Property="BorderThickness" Value="1"/>
+		<Setter Property="FontSize" Value="14"/>
+	</Style>
+
+	<!-- Monospace -->
+	<Style Selector="TextBox.monospace">
+		<Setter Property="FontFamily" Value="Consolas, Courier New, monospace"/>
+	</Style>
+
+	<!-- Close button -->
+	<Style Selector="Button.close-btn">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Padding" Value="6"/>
+		<Setter Property="FontSize" Value="16"/>
+		<Setter Property="Cursor" Value="Hand"/>
+	</Style>
+
+	<!-- flat-white -->
+	<Style Selector="Button.flat-white">
+		<Setter Property="Background" Value="Transparent"/>
+		<Setter Property="Foreground" Value="White"/>
+		<Setter Property="Padding" Value="6"/>
+		<Setter Property="FontSize" Value="18"/>
+		<Setter Property="Cursor" Value="Hand"/>
 	</Style>
 
 </Styles>
